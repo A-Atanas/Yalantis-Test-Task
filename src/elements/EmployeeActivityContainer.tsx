@@ -1,25 +1,23 @@
-import { useState } from "react";
-
 type Employee = {
     employee: {
         id: number,
         firstName: string,
         lastName: string
-    }
+    },
+	onActivityChange: (id: number, value: number) => void
+	isActive: number
 }
 
-const EmployeeContainer = ({employee}: Employee) => {
-
-	const [employeeActive, setEmployeeActive] = useState(0);
+const EmployeeContainer = ({employee, onActivityChange, isActive}: Employee) => {
 
 	const handleActivityChange = (event: React.FormEvent<HTMLInputElement>): void => {
-		setEmployeeActive(parseInt(event.currentTarget.value));
+		onActivityChange(employee.id, parseInt(event.currentTarget.value))
 	};
 
     return (
-		<div key={employee.id}>
-			<h2 className={employeeActive ? "employeeName" : undefined}>
-				{employee.firstName} {employee.lastName}
+		<div>
+			<h2 className={isActive ? "employeeName" : undefined}>
+				{employee.lastName} {employee.firstName}
 			</h2>
 			<form className="activityTogglers">
 				<label>
@@ -28,7 +26,7 @@ const EmployeeContainer = ({employee}: Employee) => {
 						id="notActive"
 						name="activity"
 						value={0}
-						defaultChecked={!employeeActive}
+						defaultChecked={!isActive}
 						onChange={handleActivityChange}
 					/>
 					Not active

@@ -1,18 +1,19 @@
-import EmployeeContainer from './EmployeeContainer';
-
+import EmployeeContainer from './EmployeeActivityContainer';
 
 type EmployeesProp = {
 	employeesProp: {
 		id: number,
 		firstName: string,
 		lastName: string,
-		dob: string
-	}[];
+		dob: string,
+		isActive: boolean
+	}[],
+	onActivityChange: (id: number, isActive: number) => void
 };
 
-const EmployeesList = ({ employeesProp }: EmployeesProp): JSX.Element => {
+export const EmployeesList = ({ employeesProp, onActivityChange }: EmployeesProp): JSX.Element => {
 
-	const sublists: { letter: string; employees: any[] }[] = [];
+	const sublists: { letter: string, employees: any[] }[] = [];
 
 	const binarySearch = (toFind: string) => {
 		let start = 0;
@@ -37,14 +38,14 @@ const EmployeesList = ({ employeesProp }: EmployeesProp): JSX.Element => {
 	}
 
 	for (let employee of employeesProp) {
-		const sublist = binarySearch(employee.firstName.charAt(0));
+		const sublist = binarySearch(employee.lastName.charAt(0));
 		if (sublist !== undefined) {
 			sublist.employees.push(employee);
 		}
 	}
 
-	for (let sublist of sublists) {
-		sublist.employees.sort((a, b) => a.lastName.localeCompare(b.lastName));
+	const handleActivityChange = (id: number, isActive: number) => {
+		onActivityChange(id, isActive);
 	}
 
 	return (
@@ -54,13 +55,18 @@ const EmployeesList = ({ employeesProp }: EmployeesProp): JSX.Element => {
 					<h1>{sublist.letter}</h1>
 					{sublist.employees.length === 0
 						? "-".repeat(10)
-						: sublist.employees.map((employee) => (
-                            <EmployeeContainer employee={employee}/>
-						  ))}
+						: sublist.employees
+								.sort((a, b) => a.lastName.localeCompare(b.lastName))
+								.map((employee) => (
+									<EmployeeContainer
+										key={employee.id}
+										employee={employee}
+										onActivityChange={handleActivityChange}
+										isActive={employee.isActive}
+									/>
+								))}
 				</div>
 			))}
 		</div>
 	);
 };
-
-export default EmployeesList;

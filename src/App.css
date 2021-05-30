@@ -1,15 +1,18 @@
 .App {
-  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .employeesSublists {
+  width: 50%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
 
 .employeesSublists > div {
-  margin: 10px 50px;
+  margin: 10px 25px;
 }
 
 .employeesSublists h2 {
@@ -24,4 +27,34 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
+
+.birthdays {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  align-items: center;
+}
+
+.birthdays > h1 {
+  text-align: center;
+}
+
+.monthContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 60%;
+  padding: 0 20% ;
+  border-left: 0.5px solid black;
+}
+
+.monthContainer > ul {
+  padding-left: 0;
+}
+
+li {
+  vertical-align: middle;
+  font-size: 1.5em;
+  font-weight: bold;
 }

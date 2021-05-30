@@ -1,10 +1,11 @@
 import "./App.css";
 import axios from "axios";
-import EmployeesList from "./elements/EmployeesList";
+import { EmployeesList } from "./elements/EmployeesList";
+import { EmployeesBirthdays } from "./elements/EmployeesBirthdays";
 import { useEffect, useState } from "react";
 
 const App = (): JSX.Element => {
-	const [employees, setEmployees] = useState([]);
+	const [employees, setEmployees] = useState<Array<any>>([]);
 
 	const getEmployees = (): void => {
 		axios
@@ -20,9 +21,20 @@ const App = (): JSX.Element => {
 		getEmployees();
 	}, []);
 
+  const handleActivityChange = (id: number, isActive: number) => {
+    const newList = employees.map(employee => {
+      if (employee.id === id) {
+        return {...employee, isActive: isActive};
+      }
+      return employee;
+    });
+    setEmployees(newList);
+  }
+
 	return (
 		<div className="App">
-			<EmployeesList employeesProp={employees} />
+			<EmployeesList employeesProp={employees} onActivityChange={handleActivityChange}/>
+      <EmployeesBirthdays chosenEmployees={employees.filter(employee => employee.isActive === 1)}/>
 		</div>
 	);
 };
