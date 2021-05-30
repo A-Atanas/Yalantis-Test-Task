@@ -11,7 +11,13 @@ type Employee = {
 const EmployeeContainer = ({employee, onActivityChange, isActive}: Employee) => {
 
 	const handleActivityChange = (event: React.FormEvent<HTMLInputElement>): void => {
-		onActivityChange(employee.id, parseInt(event.currentTarget.value))
+		const value = parseInt(event.currentTarget.value);
+		if (value === 1) {
+			localStorage.setItem(`${employee.id}`, value.toString());
+		} else {
+			localStorage.removeItem(`${employee.id}`);
+		}
+		onActivityChange(employee.id, value);
 	};
 
     return (
@@ -37,6 +43,7 @@ const EmployeeContainer = ({employee, onActivityChange, isActive}: Employee) => 
 						id="active"
 						name="activity"
 						value={1}
+						defaultChecked={!!isActive}
 						onChange={handleActivityChange}
 					/>
 					Active

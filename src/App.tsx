@@ -11,7 +11,18 @@ const App = (): JSX.Element => {
 		axios
 			.get("https://yalantis-react-school-api.yalantis.com/api/task0/users")
 			.then((response) => {
-				const data = response.data;
+				let data = response.data;
+				if (localStorage.length > 0) {
+					for (let i = 0; i < localStorage.length; i++) {
+						const key = localStorage.key(i);
+						data = data.map((employee: any) => {
+							if (employee.id === key) {
+								return { ...employee, isActive: 1 };
+							}
+							return employee;
+						});
+					}
+				}
 				setEmployees(data);
 			})
 			.catch((err) => console.error(err));
@@ -21,20 +32,22 @@ const App = (): JSX.Element => {
 		getEmployees();
 	}, []);
 
-  const handleActivityChange = (id: number, isActive: number) => {
-    const newList = employees.map(employee => {
-      if (employee.id === id) {
-        return {...employee, isActive: isActive};
-      }
-      return employee;
-    });
-    setEmployees(newList);
-  }
+	const handleActivityChange = (id: number, isActive: number) => {
+		const newList = employees.map((employee) => {
+			if (employee.id === id) {
+				return { ...employee, isActive: isActive };
+			}
+			return employee;
+		});
+		setEmployees(newList);
+	};
 
 	return (
 		<div className="App">
-			<EmployeesList employeesProp={employees} onActivityChange={handleActivityChange}/>
-      <EmployeesBirthdays chosenEmployees={employees.filter(employee => employee.isActive === 1)}/>
+			<EmployeesList employeesProp={employees} onActivityChange={handleActivityChange} />
+			<EmployeesBirthdays
+				chosenEmployees={employees.filter((employee) => employee.isActive === 1)}
+			/>
 		</div>
 	);
 };
